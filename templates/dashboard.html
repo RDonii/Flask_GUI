@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ish stoli</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='semantic-ui/semantic.min.css') }}">
+</head>
+<body>
+    <div class="ui bottom attached segment pushable">
+        <div class="ui visible inverted left vertical sidebar menu">
+          <a href="/dashboard" class="item">
+            <i class="home icon"></i>
+            Ish stoli
+          </a>
+          <a href="/sales" class="item">
+            <i class="block layout icon"></i>
+            Hisobot
+          </a>
+          <a href="/add_item" class="item">
+            <i class="cart arrow down icon"></i>
+            Mahsulot qo'shish
+          </a>
+          <a href="/update" class="item">
+            <i class="external alternate icon"></i>
+            Mahsulot sotish
+          </a>
+        </div>
+        <div class="pusher">
+          <div class="ui basic segment">
+            <h3 class="ui header">Jami mavjud mahsulotlar</h3>
+            <p>{{ response.count_items }}</p>
+            <div class="ui inverted divider"></div>
+            <h3 class="ui header">Mavjud mahsulot turlari</h3>
+            <ul>
+                {% for name in response.names %}
+                <li>{{ name }}</li>
+                {% endfor %}
+            </ul>
+            <div class="ui inverted divider"></div>
+            <h3 class="ui header">Oxirgi kirim.</h3>
+            <h5 class="ui header">{{last_in_name}}</h5>
+            <p>{{ response.last_in_date }}</p>
+            <div class="ui inverted divider"></div>
+            <h3 class="ui header">Oxirgi savdo.</h3>
+            <h5 class="ui header">{{last_out_name}}</h5>
+            <p>{{ response.last_out_date }}</p>
+            <div class="ui inverted divider"></div>
+          </div>
+        </div>
+    </div>
+</body>
+</html>
