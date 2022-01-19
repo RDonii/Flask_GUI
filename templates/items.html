@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ish stoli</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='semantic-ui/semantic.min.css') }}">
+</head>
+<body>
+    <div class="ui bottom attached segment">
+        <div class="ui visible inverted top sidebar menu">
+          <a href="/dashboard" class="item">
+            <i class="home icon"></i>
+            Ish stoli
+          </a>
+          <a href="/sales" class="item">
+            <i class="block layout icon"></i>
+            Hisobot
+          </a>
+          <a href="/add_item" class="item">
+            <i class="cart arrow down icon"></i>
+            Mahsulot qo'shish
+          </a>
+          <a href="/items" class="item">
+            <i class="external alternate icon"></i>
+            Mahsulot sotish
+          </a>
+        </div>
+        <div class="pusher">
+          <div class="ui basic segment">
+            <h1 class="ui header">Mavjud mahsulotlar:</h1>
+
+            <div class="ui inverted divider"></div>
+
+            <table class="ui celled table">
+              <thead>
+                <tr><th>ID</th>
+                <th>Nomi</th>
+                <th>Soni</th>
+                <th>Kirim narxi</th>
+                <th>Kirim sanasi</th>
+              </tr></thead>
+              <tbody>
+                {% for item in items %}
+                
+                <tr>
+                  <td data-label="id">{{item.id}}</td>
+                  <td data-label="name">{{item.name}}</td>
+                  <td data-label="count">{{item.count}}</td>
+                  <td data-label="in_price">{{item.in_price}}</td>
+                  <td data-label="in_time">{{item.in_time}}<i class="cart arrow down icon" style="margin-left: 10%;">
+                    <a href="{{ '/items/%s'%item.id|urlencode }}">
+                    <h4 class="header">Sotish</h4></i></a></td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <p class="ui warning message">
+              {% for message in messages %}
+                {{ message }}
+              {% endfor %}
+            </p>
+            {% endif %}
+          {% endwith %}
+          </div>
+        </div>
+    </div>
+</body>
+</html>

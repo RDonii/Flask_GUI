@@ -84,7 +84,7 @@ def add_item():
             flash('Mahsulotga nom bering!')
             return redirect(url_for('add_item'), code=302)
         
-        in_time = datetime.now()
+        in_time = datetime.now().replace(microsecond=0)
 
         while name[0]==' ':
             name = name.replace(" ", '')
@@ -114,6 +114,50 @@ def add_item():
             names.append(item.name)
     
     return render_template('add.html', names=names)
+
+@app.route('/items')
+def items():
+
+    items_query = Items.query.all()
+    items = [item.format() for item in items_query]
+
+    return render_template('items.html', items=items)
+
+@app.route('/items/<int:id>', methods=['GET', 'POST'])
+def items_id(id):
+    item_query = Items.query.filter(Items.id==id).first()
+    item = item_query.format()
+
+    if request.method == 'POST':
+        s_count = int(request.form.get("count"))
+        out_price = request.form.get("out_price")
+
+        if not s_count or not out_price:
+            flash('Narx va Sonini kiriting!')
+            return redirect(url_for('items_id', id=id), code=302)
+        
+        if item_query.count < s_count:
+            flash('Buncha tavar mavjud emas!')
+            return redirect(url_for('items_id', id=id), code=302)
+        
+        out_time = datetime.now().replace(microsecond=0)
+
+        try:
+            new_sale = Sales(name=item["name"], count=s_count, in_time=item["in_time"], in_price=item["in_price"], out_time=out_time, out_price=out_price)
+            new_sale.insert()
+
+            item_query.count -= s_count
+            if item_query.count == 0:
+                item_query.delete()
+            else:
+                item_query.update()
+        except:
+                flash('Xatolik yuzberdi.')
+                return redirect(url_for('items_id', id=id), code=301)
+        
+        return redirect(url_for('items'), code=301)
+
+    return render_template('saling.html', item=item)
 
 if __name__=='__main__':
     app.run(debug=True)
