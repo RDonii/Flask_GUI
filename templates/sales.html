@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ish stoli</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='semantic-ui/semantic.min.css') }}">
+</head>
+<body style="background-color: #6B7AA1;">
+  <div class="ui pointing menu teal">
+    <a href="/dashboard" class="item">
+        <i class="home icon teal"></i>
+        <b>Ish stoli</b>
+    </a>
+    <a href="/imports/1" class="item">
+        <i class="arrow alternate circle down outline icon teal"></i>
+        <b>Kirimlar</b>
+    </a>
+    <a href="/sales/1" class="active item">
+        <i class="arrow alternate circle up outline icon teal"></i>
+        <b>Sotuvlar</b>
+    </a>
+    <a href="/add_item" class="item">
+        <i class="cart arrow down icon teal"></i>
+        <b>Mahsulot qo'shish</b>
+    </a>
+    <a href="/items" class="item">
+        <i class="external alternate icon teal"></i>
+        <b>Mahsulot sotish</b>
+    </a>
+    <div class="right menu">
+      <div class="item">
+          <a href="/stop" class="item">
+              <i class="power off icon"></i>
+              <b>Serverni o'chirish</b>
+          </a>
+      </div>
+  </div>
+  </div>
+  <div class="ui segment">
+    <div class="ui buttons">
+      <a href="/sales/1"><button class="ui button {% if days == '1' %} {{ 'active' }} {% endif %}">Bugun</button></a>
+      <a href="/sales/3"><button class="ui button {% if days == '3' %} {{ 'active' }} {% endif %}">3 kun</button></a>
+      <a href="/sales/7"><button class="ui button {% if days == '7' %} {{ 'active' }} {% endif %}">7 kun</button></a>
+      <a href="/sales/30"><button class="ui button {% if days == '30' %} {{ 'active' }} {% endif %}">1 oy</button></a>
+      <a href="/sales/90"><button class="ui button {% if days == '90' %} {{ 'active' }} {% endif %}">3 oy</button></a>
+      <a href="/sales/365"><button class="ui button {% if days == '365' %} {{ 'active' }} {% endif %}">1 yil</button></a>
+    </div>
+
+    <div class="ui divider"></div>
+
+    <table class="ui celled table">
+      <thead>
+        <tr><th>ID</th>
+        <th>Nomi</th>
+        <th>Soni</th>
+        <th>Kirim narxi</th>
+        <th>Kirim sanasi</th>
+        <th>Sotuv narxi</th>
+        <th>Sotuv sanasi</th>
+      </tr></thead>
+      <tbody>
+        {% if sales %}
+        {% for sale in sales %}
+        
+        <tr>
+          <td data-label="id">{{sale.id}}</td>
+          <td data-label="name">{{sale.name}}</td>
+          <td data-label="count">{{sale.count}}</td>
+          <td data-label="in_price">{{sale.in_price}}</td>
+          <td data-label="in_time">{{sale.in_time}}</td>
+          <td data-label="out_price">{{sale.out_price}}</td>
+          <td data-label="out_time">{{sale.out_time}}</td>
+        </tr>
+
+        {% endfor %}
+        {% endif %}
+      </tbody>
+    </table>
+    
+    {% with messages = get_flashed_messages() %}
+           {% if messages %}
+           <p class="ui warning message">
+             {% for message in messages %}
+               {{ message }}
+             {% endfor %}
+           </p>
+           {% endif %}
+         {% endwith %}
+
+  </div>
+</body>
+</html>

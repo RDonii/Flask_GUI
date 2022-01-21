@@ -1,15 +1,22 @@
-import os
-from datetime import datetime
+from datetime import datetime, timedelta, date
 from tabnanny import check
 from flask import Flask, redirect, render_template, request, flash, url_for
 from modules import Imports, Sales, Items, create_db
 from auth import get_loged
 from sqlalchemy import desc
+from flaskwebgui import FlaskUI
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = '038be6dc-c709-47ef-ae3a-2240dca288c1'
+ui = FlaskUI(app, maximized=True, close_server_on_exit=False)
 
 create_db(app)
+
+def shutdown_server():
+        func = request.environ.get('werkzeug.server.shutdown')
+        if func is None:
+            raise RuntimeError('Not running with the Werkzeug Server')
+        func()
 
 @app.route('/')
 def home():
@@ -68,8 +75,8 @@ def dashboard():
 def add_item():
     if request.method == 'POST':
         name = request.form.get("name")
-        count = request.form.get("count", 0)
-        in_price = request.form.get("in_price")
+        count = int(request.form.get("count", 0))
+        in_price = int(request.form.get("in_price"))
         
         if not in_price:
             flash('Mahsulotning sotib olingan narxini kiriting!')
@@ -93,8 +100,9 @@ def add_item():
             new_import = Imports(name=name.lower().capitalize(), count=count, in_price=in_price, in_time=in_time)
             new_import.insert()
 
-            item_check = Items.query.filter(Items.name==name, Items.in_price==in_price).one_or_none()
+            item_check = Items.query.filter(Items.name==name.lower().capitalize(), Items.in_price==in_price).one_or_none()
             if item_check:
+                item_check.in_time = in_time
                 item_check.count += count
                 item_check.update()
             else:
@@ -103,10 +111,11 @@ def add_item():
 
             flash('Mahsulot omborga qo`shildi.')
             return redirect(url_for('add_item'), code=301)
+        
         except:
             flash('Xatolik yuzberdi.')
             return redirect(url_for('add_item'), code=301)
-
+        
     items = Items.query.all()
     names = []
     for item in items:
@@ -159,5 +168,26 @@ def items_id(id):
 
     return render_template('saling.html', item=item)
 
+@app.route('/sales/<int:days>')
+def sales(days):
+    start = date.today() - timedelta(days=days)
+    sales_query = Sales.query.filter(Sales.out_time>start).all()
+    sales = [sale.format() for sale in sales_query]
+
+    return render_template('sales.html', days=str(days), sales=sales)
+
+@app.route('/imports/<int:days>')
+def imports(days):
+    start = date.today() - timedelta(days=days)
+    imports_query = Imports.query.filter(Imports.in_time>start).all()
+    imports = [imp.format() for imp in imports_query]
+    
+    return render_template('imports.html', days=str(days), imports=imports)
+
+@app.get('/stop')
+def shutdown():
+    shutdown_server()
+    return render_template('exit.html')
+
 if __name__=='__main__':
-    app.run(debug=True)
+    ui.run()
