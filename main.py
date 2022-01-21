@@ -184,7 +184,7 @@ def imports(days):
     
     return render_template('imports.html', days=str(days), imports=imports)
 
-@app.get('/stop')
+@app.route('/stop')
 def shutdown():
     shutdown_server()
     return render_template('exit.html')
