@@ -1,5 +1,4 @@
 from datetime import datetime, timedelta, date
-from tabnanny import check
 from flask import Flask, redirect, render_template, request, flash, url_for
 from modules import Imports, Sales, Items, create_db
 from auth import get_loged
@@ -75,8 +74,8 @@ def dashboard():
 def add_item():
     if request.method == 'POST':
         name = request.form.get("name")
-        count = int(request.form.get("count", 0))
-        in_price = int(request.form.get("in_price"))
+        count = request.form.get("count", 0)
+        in_price = request.form.get("in_price")
         
         if not in_price:
             flash('Mahsulotning sotib olingan narxini kiriting!')
@@ -90,6 +89,11 @@ def add_item():
         if not name or len(check)==0:
             flash('Mahsulotga nom bering!')
             return redirect(url_for('add_item'), code=302)
+        
+        if len(count)==0:
+            count = 0
+        else:
+            count = int(count)
         
         in_time = datetime.now().replace(microsecond=0)
 
@@ -138,13 +142,16 @@ def items_id(id):
     item = item_query.format()
 
     if request.method == 'POST':
-        s_count = int(request.form.get("count"))
+        s_count = request.form.get("count")
         out_price = request.form.get("out_price")
 
-        if not s_count or not out_price:
+        if not s_count or not out_price or len(s_count)==0 or len(out_price)==0 :
             flash('Narx va Sonini kiriting!')
             return redirect(url_for('items_id', id=id), code=302)
-        
+        else:
+            s_count = int(s_count)
+            out_price = int(out_price)        
+
         if item_query.count < s_count:
             flash('Buncha tavar mavjud emas!')
             return redirect(url_for('items_id', id=id), code=302)
@@ -174,7 +181,16 @@ def sales(days):
     sales_query = Sales.query.filter(Sales.out_time>start).all()
     sales = [sale.format() for sale in sales_query]
 
-    return render_template('sales.html', days=str(days), sales=sales)
+    in_total = 0
+    out_total = 0
+
+    for item in sales_query:
+        in_total += (item.in_price * item.count)
+        out_total += (item.out_price * item.count)
+    
+    benefit = out_total - in_total
+
+    return render_template('sales.html', days=str(days), sales=sales, in_total=in_total, out_total=out_total, benefit=benefit)
 
 @app.route('/imports/<int:days>')
 def imports(days):
@@ -190,4 +206,4 @@ def shutdown():
     return render_template('exit.html')
 
 if __name__=='__main__':
-    ui.run()
+    app.run(debug=True)

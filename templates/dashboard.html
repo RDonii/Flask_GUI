@@ -4,6 +4,14 @@
     <meta charset="UTF-8">
     <title>Ish stoli</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='semantic-ui/semantic.min.css') }}">
+    <style>
+        p {
+            font-weight: bold;
+        }
+        li {
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body style="background-color: #6B7AA1;">
   <div class="ui pointing menu teal">
@@ -38,22 +46,22 @@
   </div>
         
           <div class="ui segment ">
-            <h3 class="ui header">Jami mavjud mahsulotlar:</h3>
+            <h3 class="ui teal header">Jami mavjud mahsulotlar:</h3>
             <p>{{ response.count_items }}</p>
             <div class="ui inverted divider"></div>
-            <h3 class="ui header">Mavjud mahsulot turlari:</h3>
+            <h3 class="ui teal header">Mavjud mahsulot turlari:</h3>
             <ul>
                 {% for name in response.names %}
                 <li>{{ name }}</li>
                 {% endfor %}
             </ul>
             <div class="ui inverted divider"></div>
-            <h3 class="ui header">Oxirgi kirim:</h3>
-            <h5 class="ui header">{{last_in_name}}</h5>
+            <h3 class="ui teal header">Oxirgi kirim:</h3>
+            <h5 class="ui teal header">{{last_in_name}}</h5>
             <p>{{ response.last_in_date }}</p>
             <div class="ui inverted divider"></div>
-            <h3 class="ui header">Oxirgi savdo:</h3>
-            <h5 class="ui header">{{last_out_name}}</h5>
+            <h3 class="ui teal header">Oxirgi savdo:</h3>
+            <h5 class="ui teal header">{{last_out_name}}</h5>
             <p>{{ response.last_out_date }}</p>
           </div>
         

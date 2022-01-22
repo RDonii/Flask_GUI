@@ -17,6 +17,14 @@
       .column {
         max-width: 450px;
       }
+
+      @media (min-height: 320px) {
+        .ui.footer { /* Increased specificity for SO snippet priority */
+          position: absolute;
+          bottom: 0;
+          width: 110%;
+        }
+      }
     </style>
     
 </head>
@@ -31,4 +39,14 @@
           </h2>
     </div>
   </div>
+
+  <div class="ui inverted footer segment">
+    <div class="ui container">
+      Muallif: <a href="https://t.me/RajabovDoniyorbek">Rajabov Doniyorbek</a>
+    </div>
+  </div>
+
+</body>
+
+
 </html>

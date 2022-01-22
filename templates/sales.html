@@ -76,17 +76,35 @@
         {% endif %}
       </tbody>
     </table>
-    
-    {% with messages = get_flashed_messages() %}
-           {% if messages %}
-           <p class="ui warning message">
-             {% for message in messages %}
-               {{ message }}
-             {% endfor %}
-           </p>
-           {% endif %}
-         {% endwith %}
 
+    <div class="ui divider"></div>
+
+    <div class="ui three statistics">
+      <div class="statistic teal">
+        <div class="value">
+          {{ in_total }} <span style="font-size: large; font-weight: bold;">so'm</span>
+        </div>
+        <div class="label">
+          Olindi
+        </div>
+      </div>
+      <div class="statistic teal">
+        <div class="value">
+          {{ out_total }} <span style="font-size: large; font-weight: bold;">so'm</span>
+        </div>
+        <div class="label">
+          Sotildi
+        </div>
+      </div>
+      <div class="statistic {% if benefit < 0 %} {{ 'red' }} {% else %} {{ 'green' }} {% endif %}">
+        <div class="value">
+          {{ benefit }} <span style="font-size: large; font-weight: bold;">so'm</span>
+        </div>
+        <div class="label">
+          Foyda
+        </div>
+      </div>
+    </div>
   </div>
 </body>
 </html>
