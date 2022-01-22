@@ -25,12 +25,12 @@ def home():
 def login():
     password = request.form.get('password')
     if not password:
-        flash('Parolni kiriting!')
+        #flash('Parolni kiriting!')
         return redirect(url_for('home'), code=302)
     elif get_loged(password):
         return redirect(url_for('dashboard'), code=302)
     else:
-        flash('Qayta urunib ko`ring.')
+        #flash('Qayta urunib ko`ring.')
         return redirect(url_for('home'), code=302)
     
 @app.route('/dashboard')
@@ -206,4 +206,4 @@ def shutdown():
     return render_template('exit.html')
 
 if __name__=='__main__':
-    app.run(debug=True)
+    ui.run()
