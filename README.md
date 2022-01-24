@@ -12,7 +12,7 @@ Do'kon mahsulotlarini boshqarib turish uchun ixcham , sodda web GUI dastur.
     - Terminaldan dastur turgan papkaga o'tib `pip install -r requirements.txt` buyrug'i beriladi.
 
 ##### Running
-    - `omborchi.sh` fayiligan yarlik olib, istalgan qulay joyga joylashtililadi va shu orqali dastur ishga tushiriladi.
+    - `omborchi.bat` fayiligan yarlik olib, istalgan qulay joyga joylashtililadi va shu orqali dastur ishga tushiriladi.
 
 ###### WARNING!!!
     - OGOHLANTIRAMAN. Foydalanib bo'lgach, dastur oynasini yopishdan oldin "Serverni o'chirish" tugmasini boshish shart.
